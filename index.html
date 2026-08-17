@@ -59,8 +59,13 @@
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
-    /* ---------- Interactive dot field ---------- */
-    #field { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    /* ---------- Static ambient backdrop ---------- */
+    body::before {
+      content: ''; position: fixed; top: -320px; left: 50%; z-index: 0;
+      width: 900px; height: 620px; transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(125, 211, 252, 0.07), transparent 65%);
+      pointer-events: none;
+    }
     nav, header, section, footer { position: relative; z-index: 1; }
 
     /* ---------- Card spotlight ---------- */
@@ -228,7 +233,6 @@
     .reveal.visible { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
-      #field { display: none; }
     }
     @media (max-width: 560px) {
       .nav-links a:not(:last-child) { display: none; }
@@ -250,8 +254,6 @@
     </div>
   </div>
 </nav>
-
-<canvas id="field" aria-hidden="true"></canvas>
 
 <header class="hero container" id="top">
   <h1>Hi, I'm Dagmawi</h1>
@@ -518,55 +520,6 @@
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // Dot field: a faint grid of dots that light up and swell near the cursor
-  const field = document.getElementById('field');
-  const fctx = field.getContext('2d');
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = matchMedia('(pointer: fine)').matches;
-  const GAP = 30, RADIUS = 170;
-  let W, H, dots = [];
-  function buildField() {
-    W = field.width = innerWidth;
-    H = field.height = innerHeight;
-    dots = [];
-    for (let x = GAP / 2; x < W; x += GAP)
-      for (let y = GAP / 2; y < H; y += GAP)
-        dots.push({ x, y });
-  }
-  function drawField(mx, my) {
-    fctx.clearRect(0, 0, W, H);
-    for (const d of dots) {
-      const dist = Math.hypot(d.x - mx, d.y - my);
-      let a = 0.055, r = 1;
-      if (dist < RADIUS) {
-        const t = 1 - dist / RADIUS;
-        a = 0.055 + t * t * 0.5;
-        r = 1 + t * 1.1;
-      }
-      fctx.beginPath();
-      fctx.arc(d.x, d.y, r, 0, 6.2832);
-      fctx.fillStyle = `rgba(125, 211, 252, ${a})`;
-      fctx.fill();
-    }
-  }
-  buildField();
-  drawField(-1e4, -1e4);
-  addEventListener('resize', () => { buildField(); drawField(-1e4, -1e4); });
-  if (!reduceMotion && finePointer) {
-    let mx = -1e4, my = -1e4, sx = -1e4, sy = -1e4;
-    addEventListener('mousemove', (e) => {
-      if (sx === -1e4) { sx = e.clientX; sy = e.clientY; }
-      mx = e.clientX; my = e.clientY;
-    });
-    document.documentElement.addEventListener('mouseleave', () => { mx = my = -1e4; });
-    (function loop() {
-      sx += (mx - sx) * 0.14;
-      sy += (my - sy) * 0.14;
-      drawField(sx, sy);
-      requestAnimationFrame(loop);
-    })();
-  }
 
   // Card spotlight: sheen follows the cursor inside each card
   document.querySelectorAll('.project-card, .skill-group, .edu-card').forEach(card => {
