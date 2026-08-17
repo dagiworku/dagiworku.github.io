@@ -59,16 +59,19 @@
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
-    /* ---------- Cursor glow ---------- */
-    :root { --glow-1: rgba(125, 211, 252, 0.14); --glow-2: rgba(125, 211, 252, 0.05); }
-    #glow {
-      position: fixed; top: 0; left: 0; width: 620px; height: 620px;
-      border-radius: 50%; pointer-events: none; z-index: 0;
-      background: radial-gradient(circle, var(--glow-1) 0%, var(--glow-2) 40%, transparent 70%);
-      opacity: 0; transition: opacity 0.6s; will-change: transform;
-    }
-    body:hover #glow { opacity: 1; }
+    /* ---------- Interactive dot field ---------- */
+    #field { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     nav, header, section, footer { position: relative; z-index: 1; }
+
+    /* ---------- Card spotlight ---------- */
+    .project-card, .skill-group, .edu-card { position: relative; overflow: hidden; }
+    .project-card::before, .skill-group::before, .edu-card::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      opacity: 0; transition: opacity 0.35s ease;
+      background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(125, 211, 252, 0.09), transparent 65%);
+    }
+    .project-card:hover::before, .skill-group:hover::before, .edu-card:hover::before { opacity: 1; }
 
     /* ---------- Hero ---------- */
     .hero { padding: 96px 0 80px; }
@@ -225,7 +228,7 @@
     .reveal.visible { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
-      #glow { display: none; }
+      #field { display: none; }
     }
     @media (max-width: 560px) {
       .nav-links a:not(:last-child) { display: none; }
@@ -248,7 +251,7 @@
   </div>
 </nav>
 
-<div id="glow" aria-hidden="true"></div>
+<canvas id="field" aria-hidden="true"></canvas>
 
 <header class="hero container" id="top">
   <h1>Hi, I'm Dagmawi</h1>
@@ -516,23 +519,63 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Cursor glow: trails the pointer, grows over interactive elements
-  const glow = document.getElementById('glow');
+  // Dot field: a faint grid of dots that light up and swell near the cursor
+  const field = document.getElementById('field');
+  const fctx = field.getContext('2d');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduceMotion) {
-    let tx = innerWidth / 2, ty = 260, x = tx, y = ty, ts = 1, s = 1;
-    addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
-    document.addEventListener('mouseover', (e) => {
-      ts = e.target.closest('a, button, .project-card, .skill-group, .edu-card') ? 1.45 : 1;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  const GAP = 30, RADIUS = 170;
+  let W, H, dots = [];
+  function buildField() {
+    W = field.width = innerWidth;
+    H = field.height = innerHeight;
+    dots = [];
+    for (let x = GAP / 2; x < W; x += GAP)
+      for (let y = GAP / 2; y < H; y += GAP)
+        dots.push({ x, y });
+  }
+  function drawField(mx, my) {
+    fctx.clearRect(0, 0, W, H);
+    for (const d of dots) {
+      const dist = Math.hypot(d.x - mx, d.y - my);
+      let a = 0.055, r = 1;
+      if (dist < RADIUS) {
+        const t = 1 - dist / RADIUS;
+        a = 0.055 + t * t * 0.5;
+        r = 1 + t * 1.1;
+      }
+      fctx.beginPath();
+      fctx.arc(d.x, d.y, r, 0, 6.2832);
+      fctx.fillStyle = `rgba(125, 211, 252, ${a})`;
+      fctx.fill();
+    }
+  }
+  buildField();
+  drawField(-1e4, -1e4);
+  addEventListener('resize', () => { buildField(); drawField(-1e4, -1e4); });
+  if (!reduceMotion && finePointer) {
+    let mx = -1e4, my = -1e4, sx = -1e4, sy = -1e4;
+    addEventListener('mousemove', (e) => {
+      if (sx === -1e4) { sx = e.clientX; sy = e.clientY; }
+      mx = e.clientX; my = e.clientY;
     });
+    document.documentElement.addEventListener('mouseleave', () => { mx = my = -1e4; });
     (function loop() {
-      x += (tx - x) * 0.09;
-      y += (ty - y) * 0.09;
-      s += (ts - s) * 0.1;
-      glow.style.transform = `translate(${x - 310}px, ${y - 310}px) scale(${s.toFixed(3)})`;
+      sx += (mx - sx) * 0.14;
+      sy += (my - sy) * 0.14;
+      drawField(sx, sy);
       requestAnimationFrame(loop);
     })();
   }
+
+  // Card spotlight: sheen follows the cursor inside each card
+  document.querySelectorAll('.project-card, .skill-group, .edu-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 
   // Scrollspy: highlight the section currently in view
   const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
