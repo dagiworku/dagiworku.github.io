@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dagmawi Worku | Backend Developer</title>
-  <meta name="description" content="Portfolio of Dagmawi Worku, a Backend Developer specializing in Python, Django, automation, and bridging hardware with software." />
+  <title>Dagmawi Worku | Backend &amp; AI Engineer</title>
+  <meta name="description" content="Portfolio of Dagmawi Worku, a Backend & AI Engineer specializing in Python, Django, automation, and bridging hardware with software." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,12 +80,13 @@
     #theme-toggle:hover { border-color: var(--accent-border); color: var(--accent); }
 
     /* ---------- Cursor glow ---------- */
+    :root { --glow-1: rgba(125, 211, 252, 0.14); --glow-2: rgba(125, 211, 252, 0.05); }
+    html[data-theme="light"] { --glow-1: rgba(2, 132, 199, 0.09); --glow-2: rgba(2, 132, 199, 0.03); }
     #glow {
-      position: fixed; top: 0; left: 0; width: 520px; height: 520px;
+      position: fixed; top: 0; left: 0; width: 620px; height: 620px;
       border-radius: 50%; pointer-events: none; z-index: 0;
-      background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
-      transform: translate(-50%, -50%); opacity: 0;
-      transition: opacity 0.5s;
+      background: radial-gradient(circle, var(--glow-1) 0%, var(--glow-2) 40%, transparent 70%);
+      opacity: 0; transition: opacity 0.6s; will-change: transform;
     }
     body:hover #glow { opacity: 1; }
     nav, header, section, footer { position: relative; z-index: 1; }
@@ -105,12 +106,6 @@
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
       50% { box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); }
-    }
-    h1 .wave { display: inline-block; transform-origin: 70% 70%; cursor: default; }
-    h1 .wave:hover { animation: wave 0.8s ease-in-out; }
-    @keyframes wave {
-      0%, 100% { transform: rotate(0); } 25% { transform: rotate(16deg); }
-      50% { transform: rotate(-8deg); } 75% { transform: rotate(10deg); }
     }
     h1 {
       font-size: clamp(38px, 7vw, 60px); font-weight: 700;
@@ -248,7 +243,7 @@
     .reveal.visible { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
-      .status-dot, h1 .wave:hover { animation: none; }
+      .status-dot { animation: none; }
       #glow { display: none; }
     }
     @media (max-width: 560px) {
@@ -280,12 +275,13 @@
 
 <header class="hero container" id="top">
   <p class="hero-status"><span class="status-dot"></span>Open to opportunities</p>
-  <h1>Hi, I'm Dagmawi <span class="wave" aria-hidden="true">👋</span></h1>
-  <p class="hero-role">Backend Developer <strong>|</strong> Python &amp; Electrical Engineer</p>
+  <h1>Hi, I'm Dagmawi</h1>
+  <p class="hero-role">Backend &amp; AI Engineer <strong>|</strong> Python</p>
   <p class="hero-summary">
     I build backend systems and automation that bridge hardware and software,
     from Django platforms and AI-powered tools to networked electrical systems.
-    Currently building QA/QC automation for architectural models at Ethix.Dev in Addis Ababa.
+    Currently working as a Backend &amp; AI Engineer at Ethix.Dev in Addis Ababa,
+    building QA/QC automation for architectural models.
   </p>
   <div class="btn-row">
     <a class="btn btn-primary" href="#projects">View Projects</a>
@@ -309,7 +305,7 @@
   <div class="timeline">
     <div class="job reveal">
       <div class="job-header">
-        <span class="job-title">Junior Backend Developer</span>
+        <span class="job-title">Backend &amp; AI Engineer</span>
         <span class="job-date">Jul 2025 - Present</span>
       </div>
       <p class="job-company">Ethix.Dev · Addis Ababa, Ethiopia</p>
@@ -543,26 +539,36 @@
     applyTheme(next);
   });
 
-  // Scroll reveal
+  // Scroll reveal, staggered within grids
+  document.querySelectorAll('.project-grid, .skills-grid, .edu-grid').forEach(grid => {
+    [...grid.children].forEach((el, i) => { el.dataset.stagger = i; });
+  });
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const delay = (e.target.dataset.stagger || 0) * 80;
+      setTimeout(() => e.target.classList.add('visible'), delay);
+      observer.unobserve(e.target);
+    });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Cursor glow
+  // Cursor glow: trails the pointer, grows over interactive elements
   const glow = document.getElementById('glow');
-  let glowX = 0, glowY = 0, curX = 0, curY = 0, glowRunning = false;
-  addEventListener('mousemove', (e) => {
-    glowX = e.clientX; glowY = e.clientY;
-    if (!glowRunning) { glowRunning = true; requestAnimationFrame(moveGlow); }
-  });
-  function moveGlow() {
-    curX += (glowX - curX) * 0.08;
-    curY += (glowY - curY) * 0.08;
-    glow.style.transform = `translate(${curX - 260}px, ${curY - 260}px)`;
-    if (Math.abs(glowX - curX) > 0.5 || Math.abs(glowY - curY) > 0.5) {
-      requestAnimationFrame(moveGlow);
-    } else { glowRunning = false; }
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) {
+    let tx = innerWidth / 2, ty = 260, x = tx, y = ty, ts = 1, s = 1;
+    addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+    document.addEventListener('mouseover', (e) => {
+      ts = e.target.closest('a, button, .project-card, .skill-group, .edu-card') ? 1.45 : 1;
+    });
+    (function loop() {
+      x += (tx - x) * 0.09;
+      y += (ty - y) * 0.09;
+      s += (ts - s) * 0.1;
+      glow.style.transform = `translate(${x - 310}px, ${y - 310}px) scale(${s.toFixed(3)})`;
+      requestAnimationFrame(loop);
+    })();
   }
 
   // Scrollspy: highlight the section currently in view
