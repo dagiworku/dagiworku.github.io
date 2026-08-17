@@ -11,30 +11,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FCFAF7;
-      --bg-card: #FFFFFF;
-      --ink: #1C1C1A;
-      --ink-60: rgba(28, 28, 26, 0.6);
-      --ink-40: rgba(28, 28, 26, 0.4);
-      --ink-10: rgba(28, 28, 26, 0.1);
-      --ink-05: rgba(28, 28, 26, 0.05);
-      --accent: #C2410C;
-      --accent-soft: rgba(194, 65, 12, 0.08);
-      --accent-border: rgba(194, 65, 12, 0.25);
+      --bg: #0A0C10;
+      --bg-card: #12151B;
+      --ink: #E8EDF2;
+      --ink-60: rgba(232, 237, 242, 0.65);
+      --ink-40: rgba(232, 237, 242, 0.45);
+      --ink-10: rgba(232, 237, 242, 0.12);
+      --ink-05: rgba(232, 237, 242, 0.06);
+      --accent: #7DD3FC;
+      --accent-soft: rgba(125, 211, 252, 0.1);
+      --accent-border: rgba(125, 211, 252, 0.3);
+      --btn-text: #0A0C10;
       --mono: 'JetBrains Mono', ui-monospace, monospace;
       --sans: 'Inter', system-ui, -apple-system, sans-serif;
     }
-    html[data-theme="dark"] {
-      --bg: #161512;
-      --bg-card: #1F1D19;
-      --ink: #EDEAE4;
-      --ink-60: rgba(237, 234, 228, 0.65);
-      --ink-40: rgba(237, 234, 228, 0.45);
-      --ink-10: rgba(237, 234, 228, 0.12);
-      --ink-05: rgba(237, 234, 228, 0.06);
-      --accent: #F97316;
-      --accent-soft: rgba(249, 115, 22, 0.1);
-      --accent-border: rgba(249, 115, 22, 0.3);
+    html[data-theme="light"] {
+      --bg: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --ink: #0F172A;
+      --ink-60: rgba(15, 23, 42, 0.65);
+      --ink-40: rgba(15, 23, 42, 0.45);
+      --ink-10: rgba(15, 23, 42, 0.12);
+      --ink-05: rgba(15, 23, 42, 0.05);
+      --accent: #0284C7;
+      --accent-soft: rgba(2, 132, 199, 0.08);
+      --accent-border: rgba(2, 132, 199, 0.3);
+      --btn-text: #FFFFFF;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -107,8 +109,8 @@
       text-decoration: none; transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
     }
     .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { box-shadow: 0 6px 20px rgba(194, 65, 12, 0.3); }
+    .btn-primary { background: var(--accent); color: var(--btn-text); }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(125, 211, 252, 0.25); }
     .btn-ghost { border: 1px solid var(--ink-10); color: var(--ink); }
     .btn-ghost:hover { border-color: var(--accent-border); color: var(--accent); }
     .social-row { display: flex; gap: 18px; align-items: center; }
@@ -160,7 +162,7 @@
     }
     .project-card:hover {
       transform: translateY(-4px); border-color: var(--accent-border);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
     .project-card.featured { grid-column: 1 / -1; }
     .project-top { display: flex; justify-content: space-between; align-items: center; }
@@ -265,7 +267,7 @@
   <h1>Dagmawi Worku</h1>
   <p class="hero-role">Backend Developer <strong>|</strong> Python &amp; Electrical Engineer</p>
   <p class="hero-summary">
-    I build backend systems and automation that bridge hardware and software —
+    I build backend systems and automation that bridge hardware and software,
     from Django platforms and AI-powered tools to networked electrical systems.
     Currently building QA/QC automation for architectural models at Ethix.Dev in Addis Ababa.
   </p>
@@ -293,7 +295,7 @@
     <div class="job reveal">
       <div class="job-header">
         <span class="job-title">Junior Backend Developer</span>
-        <span class="job-date">Jul 2025 — Present</span>
+        <span class="job-date">Jul 2025 - Present</span>
       </div>
       <p class="job-company">Ethix.Dev · Addis Ababa, Ethiopia</p>
       <ul>
@@ -307,7 +309,7 @@
     <div class="job reveal">
       <div class="job-header">
         <span class="job-title">Pre-Sales Engineer</span>
-        <span class="job-date">May 2025 — Aug 2025</span>
+        <span class="job-date">May 2025 - Aug 2025</span>
       </div>
       <p class="job-company">MOTI Engineering PLC · Addis Ababa, Ethiopia</p>
       <ul>
@@ -320,7 +322,7 @@
     <div class="job reveal">
       <div class="job-header">
         <span class="job-title">Electrical Engineer</span>
-        <span class="job-date">Dec 2024 — May 2025</span>
+        <span class="job-date">Dec 2024 - May 2025</span>
       </div>
       <p class="job-company">Romel Electrical Equipments · Addis Ababa, Ethiopia</p>
       <ul>
@@ -332,7 +334,7 @@
     <div class="job reveal">
       <div class="job-header">
         <span class="job-title">Network Engineer Intern</span>
-        <span class="job-date">Jun 2023 — Sep 2023</span>
+        <span class="job-date">Jun 2023 - Sep 2023</span>
       </div>
       <p class="job-company">Commercial Bank of Ethiopia · Addis Ababa, Ethiopia</p>
       <ul>
@@ -358,9 +360,9 @@
       <h3 class="project-name">BIM Model QA/QC Automation Platform</h3>
       <p class="project-desc">
         Led and developed an automated quality-assurance platform that analyzes architectural
-        Revit/BIM models — running rule-based compliance checks, clash detection, and AI-assisted
-        resolution suggestions, with an interactive reporting dashboard. Runs headlessly in the
-        cloud via Autodesk Platform Services Design Automation.
+        Revit/BIM models. It runs rule-based compliance checks, clash detection, and AI-assisted
+        resolution suggestions, with an interactive reporting dashboard, and executes headlessly
+        in the cloud via Autodesk Platform Services Design Automation.
       </p>
       <div class="tag-row">
         <span class="tag">Python</span><span class="tag">C#</span><span class="tag">React</span>
@@ -487,18 +489,18 @@
   <div class="edu-grid">
     <div class="edu-card reveal">
       <h3>BSc in Electrical Engineering</h3>
-      <p class="edu-sub">Addis Ababa Science and Technology University · 2019 — 2024</p>
+      <p class="edu-sub">Addis Ababa Science and Technology University · 2019 - 2024</p>
       <p>CGPA 3.18 · University Exit Exam: 75%</p>
     </div>
     <div class="edu-card reveal">
       <h3>Certificates</h3>
       <p class="edu-sub">Continuous learning</p>
       <ul>
-        <li>Google Foundations of Cybersecurity — Coursera</li>
-        <li>Data Science Fundamentals — Udacity</li>
-        <li>FCF: Introduction to Threat Landscape — Coursera</li>
-        <li>Huawei Datacom — Huawei</li>
-        <li>AI for Image Processing — KGOV &amp; AASTU</li>
+        <li>Google Foundations of Cybersecurity (Coursera)</li>
+        <li>Data Science Fundamentals (Udacity)</li>
+        <li>FCF: Introduction to Threat Landscape (Coursera)</li>
+        <li>Huawei Datacom (Huawei)</li>
+        <li>AI for Image Processing (KGOV &amp; AASTU)</li>
       </ul>
     </div>
   </div>
@@ -510,7 +512,7 @@
   <div class="contact-box reveal">
     <p>
       I'm open to backend development opportunities, collaborations, and interesting
-      automation problems. My inbox is always open — say hello!
+      automation problems. My inbox is always open, so say hello!
     </p>
     <a class="btn btn-primary" href="mailto:dagiworkur166@gmail.com">dagiworkur166@gmail.com</a>
     <div class="contact-links" style="margin-top: 24px;">
@@ -538,8 +540,7 @@
     moon.style.display = t === 'dark' ? 'none' : 'flex';
     sun.style.display = t === 'dark' ? 'flex' : 'none';
   }
-  const saved = localStorage.getItem('theme') ||
-    (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const saved = localStorage.getItem('theme') || 'dark';
   applyTheme(saved);
   toggle.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
