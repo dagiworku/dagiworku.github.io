@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dagmawi Worku | Backend &amp; AI Engineer</title>
   <meta name="description" content="Portfolio of Dagmawi Worku, a Backend & AI Engineer specializing in Python, Django, automation, and bridging hardware with software." />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -24,19 +24,6 @@
       --btn-text: #0A0C10;
       --mono: 'JetBrains Mono', ui-monospace, monospace;
       --sans: 'Inter', system-ui, -apple-system, sans-serif;
-    }
-    html[data-theme="light"] {
-      --bg: #F8FAFC;
-      --bg-card: #FFFFFF;
-      --ink: #0F172A;
-      --ink-60: rgba(15, 23, 42, 0.65);
-      --ink-40: rgba(15, 23, 42, 0.45);
-      --ink-10: rgba(15, 23, 42, 0.12);
-      --ink-05: rgba(15, 23, 42, 0.05);
-      --accent: #0284C7;
-      --accent-soft: rgba(2, 132, 199, 0.08);
-      --accent-border: rgba(2, 132, 199, 0.3);
-      --btn-text: #FFFFFF;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -71,17 +58,9 @@
       text-decoration: none; transition: color 0.2s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-    #theme-toggle {
-      background: none; border: 1px solid var(--ink-10); border-radius: 8px;
-      width: 34px; height: 34px; cursor: pointer; color: var(--ink-60);
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    #theme-toggle:hover { border-color: var(--accent-border); color: var(--accent); }
 
     /* ---------- Cursor glow ---------- */
     :root { --glow-1: rgba(125, 211, 252, 0.14); --glow-2: rgba(125, 211, 252, 0.05); }
-    html[data-theme="light"] { --glow-1: rgba(2, 132, 199, 0.09); --glow-2: rgba(2, 132, 199, 0.03); }
     #glow {
       position: fixed; top: 0; left: 0; width: 620px; height: 620px;
       border-radius: 50%; pointer-events: none; z-index: 0;
@@ -248,10 +227,6 @@
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
       <a href="#contact">Contact</a>
-      <button id="theme-toggle" aria-label="Toggle dark mode">
-        <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      </button>
     </div>
   </div>
 </nav>
@@ -505,24 +480,6 @@
 </footer>
 
 <script>
-  // Theme toggle with persistence
-  const root = document.documentElement;
-  const toggle = document.getElementById('theme-toggle');
-  const moon = document.getElementById('icon-moon');
-  const sun = document.getElementById('icon-sun');
-  function applyTheme(t) {
-    root.setAttribute('data-theme', t);
-    moon.style.display = t === 'dark' ? 'none' : 'flex';
-    sun.style.display = t === 'dark' ? 'flex' : 'none';
-  }
-  const saved = localStorage.getItem('theme') || 'dark';
-  applyTheme(saved);
-  toggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
-    applyTheme(next);
-  });
-
   // Scroll reveal, staggered within grids
   document.querySelectorAll('.project-grid, .skills-grid, .edu-grid').forEach(grid => {
     [...grid.children].forEach((el, i) => { el.dataset.stagger = i; });
