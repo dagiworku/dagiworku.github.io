@@ -62,16 +62,15 @@
       display: flex; align-items: center; justify-content: space-between;
     }
     .nav-logo {
-      font-family: var(--mono); font-size: 15px; font-weight: 500;
+      font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
       color: var(--ink); text-decoration: none;
     }
-    .nav-logo span { color: var(--accent); }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a {
       font-size: 14px; font-weight: 500; color: var(--ink-60);
       text-decoration: none; transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
     #theme-toggle {
       background: none; border: 1px solid var(--ink-10); border-radius: 8px;
       width: 34px; height: 34px; cursor: pointer; color: var(--ink-60);
@@ -80,16 +79,39 @@
     }
     #theme-toggle:hover { border-color: var(--accent-border); color: var(--accent); }
 
+    /* ---------- Cursor glow ---------- */
+    #glow {
+      position: fixed; top: 0; left: 0; width: 520px; height: 520px;
+      border-radius: 50%; pointer-events: none; z-index: 0;
+      background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
+      transform: translate(-50%, -50%); opacity: 0;
+      transition: opacity 0.5s;
+    }
+    body:hover #glow { opacity: 1; }
+    nav, header, section, footer { position: relative; z-index: 1; }
+
     /* ---------- Hero ---------- */
     .hero { padding: 96px 0 80px; }
-    .hero-prompt {
-      font-family: var(--mono); font-size: 14px; color: var(--accent);
-      margin-bottom: 20px;
+    .hero-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--ink-60);
+      border: 1px solid var(--ink-10); border-radius: 999px;
+      padding: 6px 14px; margin-bottom: 24px;
     }
-    .hero-prompt::after {
-      content: '▊'; animation: blink 1.1s steps(1) infinite; margin-left: 2px;
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #34D399;
+      animation: pulse 2s ease-in-out infinite;
     }
-    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); }
+    }
+    h1 .wave { display: inline-block; transform-origin: 70% 70%; cursor: default; }
+    h1 .wave:hover { animation: wave 0.8s ease-in-out; }
+    @keyframes wave {
+      0%, 100% { transform: rotate(0); } 25% { transform: rotate(16deg); }
+      50% { transform: rotate(-8deg); } 75% { transform: rotate(10deg); }
+    }
     h1 {
       font-size: clamp(38px, 7vw, 60px); font-weight: 700;
       letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px;
@@ -226,7 +248,8 @@
     .reveal.visible { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
-      .hero-prompt::after { animation: none; }
+      .status-dot, h1 .wave:hover { animation: none; }
+      #glow { display: none; }
     }
     @media (max-width: 560px) {
       .nav-links a:not(:last-child) { display: none; }
@@ -238,7 +261,7 @@
 
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#top"><span>~/</span>dagmawi</a>
+    <a class="nav-logo" href="#top">Dagmawi Worku</a>
     <div class="nav-links">
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
@@ -253,9 +276,11 @@
   </div>
 </nav>
 
+<div id="glow" aria-hidden="true"></div>
+
 <header class="hero container" id="top">
-  <p class="hero-prompt">$ whoami</p>
-  <h1>Dagmawi Worku</h1>
+  <p class="hero-status"><span class="status-dot"></span>Open to opportunities</p>
+  <h1>Hi, I'm Dagmawi <span class="wave" aria-hidden="true">👋</span></h1>
   <p class="hero-role">Backend Developer <strong>|</strong> Python &amp; Electrical Engineer</p>
   <p class="hero-summary">
     I build backend systems and automation that bridge hardware and software,
@@ -481,7 +506,10 @@
       I'm open to backend development opportunities, collaborations, and interesting
       automation problems. My inbox is always open, so say hello!
     </p>
-    <a class="btn btn-primary" href="mailto:dagiworkur166@gmail.com">dagiworkur166@gmail.com</a>
+    <div class="btn-row" style="justify-content: center;">
+      <a class="btn btn-primary" href="mailto:dagiworkur166@gmail.com">dagiworkur166@gmail.com</a>
+      <button class="btn btn-ghost" id="copy-email" type="button" style="font-family: inherit; font-size: 15px; cursor: pointer; background: none;">Copy email</button>
+    </div>
     <div class="contact-links" style="margin-top: 24px;">
       <a href="tel:+251962174907">+251 962 174 907</a>
       <span style="color: var(--ink-10)">|</span>
@@ -493,7 +521,7 @@
 </section>
 
 <footer>
-  <p>Designed &amp; built by <span>Dagmawi Worku</span> · Addis Ababa, Ethiopia</p>
+  <p>Designed &amp; built by <span>Dagmawi Worku</span> · Addis Ababa, Ethiopia <span id="local-time"></span></p>
 </footer>
 
 <script>
@@ -520,6 +548,52 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Cursor glow
+  const glow = document.getElementById('glow');
+  let glowX = 0, glowY = 0, curX = 0, curY = 0, glowRunning = false;
+  addEventListener('mousemove', (e) => {
+    glowX = e.clientX; glowY = e.clientY;
+    if (!glowRunning) { glowRunning = true; requestAnimationFrame(moveGlow); }
+  });
+  function moveGlow() {
+    curX += (glowX - curX) * 0.08;
+    curY += (glowY - curY) * 0.08;
+    glow.style.transform = `translate(${curX - 260}px, ${curY - 260}px)`;
+    if (Math.abs(glowX - curX) > 0.5 || Math.abs(glowY - curY) > 0.5) {
+      requestAnimationFrame(moveGlow);
+    } else { glowRunning = false; }
+  }
+
+  // Scrollspy: highlight the section currently in view
+  const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => spy.observe(s));
+
+  // Copy email
+  const copyBtn = document.getElementById('copy-email');
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('dagiworkur166@gmail.com');
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(() => { copyBtn.textContent = 'Copy email'; }, 1800);
+    } catch { copyBtn.textContent = 'dagiworkur166@gmail.com'; }
+  });
+
+  // Local time in Addis Ababa
+  const timeEl = document.getElementById('local-time');
+  function tick() {
+    const t = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Addis_Ababa', hour: '2-digit', minute: '2-digit' });
+    timeEl.textContent = '· ' + t + ' EAT';
+  }
+  tick(); setInterval(tick, 30000);
 </script>
 </body>
 </html>
