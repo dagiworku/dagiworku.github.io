@@ -121,13 +121,13 @@
     .social-row svg { width: 21px; height: 21px; }
 
     /* ---------- Sections ---------- */
-    section { padding: 64px 0; }
-    .section-title {
-      font-family: var(--mono); font-size: 14px; color: var(--accent);
-      margin-bottom: 8px;
-    }
+    section { padding: 56px 0; }
     .section-heading {
-      font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 36px;
+      font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 32px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .section-heading::after {
+      content: ''; height: 1px; background: var(--ink-10); flex-grow: 1;
     }
 
     /* ---------- Experience timeline ---------- */
@@ -154,37 +154,28 @@
     .job li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
 
     /* ---------- Projects ---------- */
-    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
     .project-card {
-      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 14px;
-      padding: 24px; display: flex; flex-direction: column; gap: 12px;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px;
+      padding: 22px; display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.2s;
     }
-    .project-card:hover {
-      transform: translateY(-4px); border-color: var(--accent-border);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-    }
+    .project-card:hover { border-color: var(--accent-border); }
     .project-card.featured { grid-column: 1 / -1; }
-    .project-top { display: flex; justify-content: space-between; align-items: center; }
-    .project-icon { color: var(--accent); display: flex; }
-    .project-icon svg { width: 26px; height: 26px; }
-    .featured-badge {
-      font-family: var(--mono); font-size: 11px; color: var(--accent);
-      background: var(--accent-soft); border: 1px solid var(--accent-border);
-      padding: 3px 10px; border-radius: 999px;
+    .project-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .project-name { font-size: 17px; font-weight: 600; }
+    .project-link {
+      font-family: var(--mono); font-size: 13px; color: var(--accent);
+      text-decoration: none; white-space: nowrap;
     }
-    .project-name { font-size: 18px; font-weight: 600; }
+    .project-link:hover { text-decoration: underline; }
     .project-desc { font-size: 14.5px; color: var(--ink-60); flex-grow: 1; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag {
-      font-family: var(--mono); font-size: 12px; color: var(--accent);
-      background: var(--accent-soft); padding: 3px 10px; border-radius: 6px;
-    }
+    .tech-line { font-family: var(--mono); font-size: 12.5px; color: var(--ink-40); }
 
     /* ---------- Skills ---------- */
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
     .skill-group {
-      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 14px; padding: 22px;
+      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px; padding: 22px;
     }
     .skill-group h3 {
       font-family: var(--mono); font-size: 13px; font-weight: 500;
@@ -202,7 +193,7 @@
     .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 640px) { .edu-grid { grid-template-columns: 1fr; } }
     .edu-card {
-      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 14px; padding: 24px;
+      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px; padding: 24px;
     }
     .edu-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
     .edu-card .edu-sub { font-size: 14.5px; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
@@ -213,7 +204,7 @@
 
     /* ---------- Contact ---------- */
     .contact-box {
-      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 18px;
+      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px;
       padding: 48px 32px; text-align: center;
     }
     .contact-box p { color: var(--ink-60); max-width: 480px; margin: 0 auto 28px; }
@@ -289,8 +280,7 @@
 </header>
 
 <section id="experience" class="container">
-  <p class="section-title">// experience</p>
-  <h2 class="section-heading">Where I've Worked</h2>
+  <h2 class="section-heading">Experience</h2>
   <div class="timeline">
     <div class="job reveal">
       <div class="job-header">
@@ -347,109 +337,88 @@
 </section>
 
 <section id="projects" class="container">
-  <p class="section-title">// projects</p>
-  <h2 class="section-heading">Things I've Built</h2>
+  <h2 class="section-heading">Projects</h2>
   <div class="project-grid">
     <div class="project-card featured reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M9 11h.01M15 11h.01M9 14h.01M15 14h.01"/></svg>
-        </span>
-        <span class="featured-badge">FLAGSHIP</span>
+      <div class="project-head">
+        <h3 class="project-name">BIM Model QA/QC Automation Platform</h3>
       </div>
-      <h3 class="project-name">BIM Model QA/QC Automation Platform</h3>
       <p class="project-desc">
         Led and developed an automated quality-assurance platform that analyzes architectural
         Revit/BIM models. It runs rule-based compliance checks, clash detection, and AI-assisted
         resolution suggestions, with an interactive reporting dashboard, and executes headlessly
         in the cloud via Autodesk Platform Services Design Automation.
       </p>
-      <div class="tag-row">
-        <span class="tag">Python</span><span class="tag">C#</span><span class="tag">React</span>
-        <span class="tag">Flask</span><span class="tag">Revit API</span><span class="tag">Autodesk APS</span>
-      </div>
+      <p class="tech-line">Python · C# · React · Flask · Revit API · Autodesk APS</p>
     </div>
     <div class="project-card reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        </span>
+      <div class="project-head">
+        <h3 class="project-name">SceneState</h3>
+        <a class="project-link" href="https://scenestate.ai/" target="_blank" rel="noopener">scenestate.ai</a>
       </div>
-      <h3 class="project-name">Real Estate Tour Platform</h3>
       <p class="project-desc">
-        A property-tour platform with AI-generated walkthrough videos, built with Django and
-        Google's Gemini and VEO 3 models.
+        A platform that turns property photos into virtual tour videos for real estate
+        professionals, built with Django and Google's Gemini and VEO 3 models.
       </p>
-      <div class="tag-row">
-        <span class="tag">Python</span><span class="tag">Django</span><span class="tag">Gemini</span><span class="tag">VEO 3</span>
-      </div>
+      <p class="tech-line">Python · Django · Gemini · VEO 3</p>
     </div>
     <div class="project-card reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-        </span>
+      <div class="project-head">
+        <h3 class="project-name">Trademark Lab</h3>
+        <a class="project-link" href="https://clearyourtrademark.com/" target="_blank" rel="noopener">clearyourtrademark.com</a>
       </div>
-      <h3 class="project-name">Healthcare Meeting Transcriber</h3>
+      <p class="project-desc">
+        AI-powered trademark similarity search across USPTO and EUIPO databases. Upload a logo
+        and a Vision Transformer embeds it for sub-second visual similarity matching against
+        millions of records, for clearance checks and infringement monitoring.
+      </p>
+      <p class="tech-line">Python · Vision Transformer · pgvector · PostgreSQL</p>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-head">
+        <h3 class="project-name">Healthcare Meeting Transcriber</h3>
+      </div>
       <p class="project-desc">
         Backend system for a healthcare platform that records, transcribes, and summarizes
         clinical meetings.
       </p>
-      <div class="tag-row">
-        <span class="tag">Python</span><span class="tag">Backend</span><span class="tag">AI</span>
-      </div>
+      <p class="tech-line">Python · Backend · AI</p>
     </div>
     <div class="project-card reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </span>
+      <div class="project-head">
+        <h3 class="project-name">GPS/GSM Vehicle Tracker</h3>
       </div>
-      <h3 class="project-name">GPS/GSM Vehicle Tracker</h3>
       <p class="project-desc">
         Built and prototyped a geofence-enabled vehicle tracking system that logs and reports
         vehicle location over GSM, using Arduino and C++.
       </p>
-      <div class="tag-row">
-        <span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">GPS/GSM</span>
-      </div>
+      <p class="tech-line">Arduino · C++ · GPS/GSM</p>
     </div>
     <div class="project-card reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>
-        </span>
+      <div class="project-head">
+        <h3 class="project-name">Health Monitoring Device</h3>
       </div>
-      <h3 class="project-name">Health Monitoring Device</h3>
       <p class="project-desc">
         A wearable health monitor measuring blood-oxygen level and heart rate, built on
         Arduino Uno with C++.
       </p>
-      <div class="tag-row">
-        <span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">Sensors</span>
-      </div>
+      <p class="tech-line">Arduino · C++ · Sensors</p>
     </div>
     <div class="project-card reveal">
-      <div class="project-top">
-        <span class="project-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6.01 18h.01M10.01 18h.01"/><path d="M2 10h20M7 6h.01M12 6h10"/><rect x="2" y="2" width="20" height="8" rx="2"/></svg>
-        </span>
+      <div class="project-head">
+        <h3 class="project-name">Multi-Router Network Design</h3>
       </div>
-      <h3 class="project-name">Multi-Router Network Design</h3>
       <p class="project-desc">
         Data-communication project: designed and configured two- and three-router network
         topologies with full routing in Cisco Packet Tracer.
       </p>
-      <div class="tag-row">
-        <span class="tag">Cisco</span><span class="tag">Packet Tracer</span><span class="tag">Routing</span>
-      </div>
+      <p class="tech-line">Cisco · Packet Tracer · Routing</p>
     </div>
   </div>
 </section>
 
 <section id="skills" class="container">
-  <p class="section-title">// skills</p>
-  <h2 class="section-heading">What I Work With</h2>
+  <h2 class="section-heading">Skills</h2>
   <div class="skills-grid">
     <div class="skill-group reveal">
       <h3>Backend &amp; Languages</h3>
@@ -484,7 +453,6 @@
 </section>
 
 <section id="education" class="container">
-  <p class="section-title">// education</p>
   <h2 class="section-heading">Education &amp; Certificates</h2>
   <div class="edu-grid">
     <div class="edu-card reveal">
@@ -507,8 +475,7 @@
 </section>
 
 <section id="contact" class="container">
-  <p class="section-title">// contact</p>
-  <h2 class="section-heading">Get in Touch</h2>
+  <h2 class="section-heading">Contact</h2>
   <div class="contact-box reveal">
     <p>
       I'm open to backend development opportunities, collaborations, and interesting
