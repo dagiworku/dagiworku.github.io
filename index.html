@@ -112,47 +112,64 @@
       content: ''; height: 1px; background: var(--ink-10); flex-grow: 1;
     }
 
-    /* ---------- Experience timeline ---------- */
-    .timeline { position: relative; padding-left: 28px; }
-    .timeline::before {
-      content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px;
-      width: 2px; background: var(--ink-10);
+    /* ---------- Experience ---------- */
+    .job {
+      display: grid; grid-template-columns: 150px 1fr; gap: 6px 32px;
+      padding: 26px 0; border-top: 1px solid var(--ink-05);
     }
-    .job { position: relative; padding-bottom: 40px; }
-    .job:last-child { padding-bottom: 0; }
-    .job::before {
-      content: ''; position: absolute; left: -28px; top: 7px;
-      width: 12px; height: 12px; border-radius: 50%;
-      background: var(--bg); border: 2px solid var(--accent);
-    }
-    .job-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 4px; }
-    .job-title { font-size: 18px; font-weight: 600; }
-    .job-date { font-family: var(--mono); font-size: 13px; color: var(--ink-40); white-space: nowrap; padding-top: 4px; }
-    .job-company { font-size: 15px; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
+    .job:first-of-type { border-top: none; padding-top: 0; }
+    .job-date { font-family: var(--mono); font-size: 13px; color: var(--ink-40); padding-top: 4px; white-space: nowrap; }
+    .job-title { font-size: 17px; font-weight: 600; }
+    .job-company { font-size: 14.5px; color: var(--accent); font-weight: 500; margin: 2px 0 10px; }
     .job ul { list-style: none; }
     .job li {
       font-size: 15px; color: var(--ink-60); padding-left: 18px; position: relative; margin-bottom: 6px;
     }
     .job li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    @media (max-width: 620px) { .job { grid-template-columns: 1fr; } }
 
     /* ---------- Projects ---------- */
     .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
     .project-card {
-      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px;
-      padding: 22px; display: flex; flex-direction: column; gap: 10px;
-      transition: border-color 0.2s;
+      background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 10px;
+      padding: 22px; display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    .project-card:hover { border-color: var(--accent-border); }
-    .project-card.featured { grid-column: 1 / -1; }
+    .project-card:hover {
+      border-color: var(--accent-border); transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+    }
+    .project-card.featured {
+      grid-column: 1 / -1; display: grid;
+      grid-template-columns: 1fr 1.05fr; gap: 24px; align-items: center;
+    }
+    .project-body { display: flex; flex-direction: column; gap: 12px; }
+    .project-media {
+      border-radius: 6px; overflow: hidden; border: 1px solid var(--ink-05);
+      aspect-ratio: 16 / 9; background: #0E1116;
+    }
+    .project-media img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+      display: block; transition: transform 0.6s ease;
+    }
+    .project-card:hover .project-media img { transform: scale(1.05); }
     .project-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .project-name { font-size: 17px; font-weight: 600; }
     .project-link {
       font-family: var(--mono); font-size: 13px; color: var(--accent);
       text-decoration: none; white-space: nowrap;
     }
+    .project-link::after {
+      content: '↗'; display: inline-block; margin-left: 4px;
+      transition: transform 0.2s ease;
+    }
+    .project-link:hover::after { transform: translate(2px, -2px); }
     .project-link:hover { text-decoration: underline; }
     .project-desc { font-size: 14.5px; color: var(--ink-60); flex-grow: 1; }
     .tech-line { font-family: var(--mono); font-size: 12.5px; color: var(--ink-40); }
+    @media (max-width: 720px) {
+      .project-card.featured { display: flex; }
+    }
 
     /* ---------- Skills ---------- */
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
@@ -261,57 +278,57 @@
 
 <section id="experience" class="container">
   <h2 class="section-heading">Experience</h2>
-  <div class="timeline">
+  <div class="jobs">
     <div class="job reveal">
-      <div class="job-header">
-        <span class="job-title">Backend &amp; AI Engineer</span>
-        <span class="job-date">Jul 2025 - Present</span>
-      </div>
-      <p class="job-company">Ethix.Dev · Addis Ababa, Ethiopia</p>
-      <ul>
+      <span class="job-date">Jul 2025 - Present</span>
+      <div>
+        <h3 class="job-title">Backend &amp; AI Engineer</h3>
+        <p class="job-company">Ethix.Dev · Addis Ababa, Ethiopia</p>
+        <ul>
         <li>Lead developer of a QA/QC platform for analyzing architectural (Revit/BIM) models using Python, C#, and React</li>
         <li>Built backend systems for platforms including a healthcare meeting transcriber</li>
         <li>Built a real-estate tour platform using Python (Django), Gemini, and VEO 3</li>
         <li>Wrote automation scripts to streamline team workflows</li>
         <li>Led LinkedIn content creation and outreach</li>
       </ul>
+      </div>
     </div>
     <div class="job reveal">
-      <div class="job-header">
-        <span class="job-title">Pre-Sales Engineer</span>
-        <span class="job-date">May 2025 - Aug 2025</span>
-      </div>
-      <p class="job-company">MOTI Engineering PLC · Addis Ababa, Ethiopia</p>
-      <ul>
+      <span class="job-date">May 2025 - Aug 2025</span>
+      <div>
+        <h3 class="job-title">Pre-Sales Engineer</h3>
+        <p class="job-company">MOTI Engineering PLC · Addis Ababa, Ethiopia</p>
+        <ul>
         <li>Consulted clients on network and security devices</li>
         <li>Prepared proposals and bid documents for projects</li>
         <li>Collaborated with vendors including Cisco, Huawei, and Fortinet</li>
         <li>Delivered and installed network and security devices</li>
       </ul>
+      </div>
     </div>
     <div class="job reveal">
-      <div class="job-header">
-        <span class="job-title">Electrical Engineer</span>
-        <span class="job-date">Dec 2024 - May 2025</span>
-      </div>
-      <p class="job-company">Romel Electrical Equipments · Addis Ababa, Ethiopia</p>
-      <ul>
+      <span class="job-date">Dec 2024 - May 2025</span>
+      <div>
+        <h3 class="job-title">Electrical Engineer</h3>
+        <p class="job-company">Romel Electrical Equipments · Addis Ababa, Ethiopia</p>
+        <ul>
         <li>Optimized electrical systems for manufacturing, improving production speed</li>
         <li>Assisted with integration of new electrical systems</li>
         <li>Maintained and installed electrical machines on production lines</li>
       </ul>
+      </div>
     </div>
     <div class="job reveal">
-      <div class="job-header">
-        <span class="job-title">Network Engineer Intern</span>
-        <span class="job-date">Jun 2023 - Sep 2023</span>
-      </div>
-      <p class="job-company">Commercial Bank of Ethiopia · Addis Ababa, Ethiopia</p>
-      <ul>
+      <span class="job-date">Jun 2023 - Sep 2023</span>
+      <div>
+        <h3 class="job-title">Network Engineer Intern</h3>
+        <p class="job-company">Commercial Bank of Ethiopia · Addis Ababa, Ethiopia</p>
+        <ul>
         <li>Installed and maintained networks across multiple branches</li>
         <li>Maintained hardware including PCs, printers, and ATMs</li>
         <li>Diagnosed ATM systems using specialized software</li>
       </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -320,6 +337,8 @@
   <h2 class="section-heading">Projects</h2>
   <div class="project-grid">
     <div class="project-card featured reveal">
+      <div class="project-media"><img src="assets/qaqc-cover.svg" alt="Illustration of a BIM model section with clash detection markers and a QA/QC report panel" loading="lazy"></div>
+      <div class="project-body">
       <div class="project-head">
         <h3 class="project-name">BIM Model QA/QC Automation Platform</h3>
       </div>
@@ -330,8 +349,10 @@
         in the cloud via Autodesk Platform Services Design Automation.
       </p>
       <p class="tech-line">Python · C# · React · Flask · Revit API · Autodesk APS</p>
+      </div>
     </div>
     <div class="project-card reveal">
+      <div class="project-media"><img src="assets/scenestate.jpg" alt="SceneState landing page: create virtual tour videos instantly with AI" loading="lazy"></div>
       <div class="project-head">
         <h3 class="project-name">SceneState</h3>
         <a class="project-link" href="https://scenestate.ai/" target="_blank" rel="noopener">scenestate.ai</a>
@@ -343,6 +364,7 @@
       <p class="tech-line">Python · Django · Gemini · VEO 3</p>
     </div>
     <div class="project-card reveal">
+      <div class="project-media"><img src="assets/trademark.jpg" alt="Trademark Lab interface: image-based trademark similarity search" loading="lazy"></div>
       <div class="project-head">
         <h3 class="project-name">Trademark Lab</h3>
         <a class="project-link" href="https://clearyourtrademark.com/" target="_blank" rel="noopener">clearyourtrademark.com</a>
