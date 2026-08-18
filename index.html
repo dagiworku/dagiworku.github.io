@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0A0C10" />
   <title>Dagmawi Worku | Backend &amp; AI Engineer</title>
   <meta name="description" content="Portfolio of Dagmawi Worku, a Backend & AI Engineer specializing in Python, Django, automation, and bridging hardware with software." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2" />
@@ -26,7 +27,7 @@
       --sans: 'Inter', system-ui, -apple-system, sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
       background: var(--bg);
       color: var(--ink);
@@ -40,7 +41,9 @@
     /* ---------- Nav ---------- */
     nav {
       position: sticky; top: 0; z-index: 50;
+      background: rgba(10, 12, 16, 0.85);
       background: color-mix(in srgb, var(--bg) 85%, transparent);
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--ink-05);
     }
@@ -58,6 +61,10 @@
       text-decoration: none; transition: color 0.2s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    #nav-toggle {
+      display: none; background: none; border: 0; cursor: pointer;
+      color: var(--ink); padding: 6px; margin: -6px;
+    }
 
     /* ---------- Static ambient backdrop ---------- */
     body::before {
@@ -66,7 +73,7 @@
       background: radial-gradient(ellipse at center, rgba(125, 211, 252, 0.07), transparent 65%);
       pointer-events: none;
     }
-    nav, header, section, footer { position: relative; z-index: 1; }
+    header, section, footer { position: relative; z-index: 1; }
 
     /* ---------- Card spotlight ---------- */
     .project-card, .skill-group, .edu-card { position: relative; overflow: hidden; }
@@ -137,7 +144,7 @@
     @media (max-width: 620px) { .job { grid-template-columns: 1fr; } }
 
     /* ---------- Projects ---------- */
-    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 16px; }
     .project-card {
       background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 10px;
       padding: 22px; display: flex; flex-direction: column; gap: 12px;
@@ -180,7 +187,7 @@
     }
 
     /* ---------- Skills ---------- */
-    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 20px; }
     .skill-group {
       background: var(--bg-card); border: 1px solid var(--ink-10); border-radius: 8px; padding: 22px;
     }
@@ -234,9 +241,20 @@
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
     }
-    @media (max-width: 560px) {
-      .nav-links a:not(:last-child) { display: none; }
+    @media (max-width: 700px) {
+      #nav-toggle { display: flex; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: var(--bg); border-bottom: 1px solid var(--ink-10);
+        padding: 4px 24px 12px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 13px 0; font-size: 15px; border-top: 1px solid var(--ink-05); }
       .hero { padding-top: 64px; padding-bottom: 56px; }
+      .hero-summary { font-size: 16px; }
+      section { padding: 44px 0; }
+      .contact-box { padding: 36px 20px; }
     }
   </style>
 </head>
@@ -245,7 +263,10 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="#top">Dagmawi Worku</a>
-    <div class="nav-links">
+    <button id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="nav-links" id="nav-menu">
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
@@ -507,6 +528,18 @@
 </footer>
 
 <script>
+  // Mobile nav menu
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  navToggle.addEventListener('click', () => {
+    const open = navMenu.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+  navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navMenu.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
   // Scroll reveal, staggered within grids
   document.querySelectorAll('.project-grid, .skills-grid, .edu-grid').forEach(grid => {
     [...grid.children].forEach((el, i) => { el.dataset.stagger = i; });
