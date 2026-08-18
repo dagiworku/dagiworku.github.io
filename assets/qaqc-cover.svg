@@ -1,40 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
-  <rect width="960" height="540" fill="#0E1116"/>
-  <g stroke="#E8EDF2" stroke-opacity="0.05" stroke-width="1">
+  <rect width="960" height="540" fill="#101214"/>
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
     <path d="M0 60H960M0 120H960M0 180H960M0 240H960M0 300H960M0 360H960M0 420H960M0 480H960"/>
     <path d="M60 0V540M120 0V540M180 0V540M240 0V540M300 0V540M360 0V540M420 0V540M480 0V540M540 0V540M600 0V540M660 0V540M720 0V540M780 0V540M840 0V540M900 0V540"/>
   </g>
   <!-- building section wireframe -->
-  <g stroke="#7DD3FC" stroke-opacity="0.75" stroke-width="2" fill="none">
+  <g stroke="#DDFF00" stroke-opacity="0.8" stroke-width="2" fill="none">
     <path d="M140 440V180l180-90 180 90v260"/>
     <path d="M140 260h360M140 350h360M320 440V90"/>
     <path d="M180 440v-50h50v50M410 440v-50h50v50"/>
   </g>
   <!-- MEP runs -->
-  <g stroke="#38BDF8" stroke-opacity="0.45" stroke-width="3" fill="none">
+  <g stroke="#DDFF00" stroke-opacity="0.35" stroke-width="3" fill="none">
     <path d="M110 305h420"/>
     <path d="M110 320h300v60h120"/>
   </g>
   <!-- clash marker -->
-  <circle cx="410" cy="320" r="26" fill="none" stroke="#F87171" stroke-width="2.5" stroke-dasharray="5 5">
+  <circle cx="410" cy="320" r="26" fill="none" stroke="#FF5C5C" stroke-width="2.5" stroke-dasharray="5 5">
     <animateTransform attributeName="transform" type="rotate" from="0 410 320" to="360 410 320" dur="14s" repeatCount="indefinite"/>
   </circle>
-  <circle cx="410" cy="320" r="5" fill="#F87171"/>
+  <circle cx="410" cy="320" r="5" fill="#FF5C5C"/>
   <!-- report panel -->
   <g>
-    <rect x="600" y="130" width="250" height="280" rx="10" fill="#12151B" stroke="#E8EDF2" stroke-opacity="0.12"/>
-    <rect x="622" y="156" width="120" height="12" rx="6" fill="#E8EDF2" fill-opacity="0.7"/>
-    <rect x="622" y="192" width="206" height="8" rx="4" fill="#E8EDF2" fill-opacity="0.16"/>
-    <rect x="622" y="212" width="176" height="8" rx="4" fill="#E8EDF2" fill-opacity="0.16"/>
-    <rect x="622" y="232" width="192" height="8" rx="4" fill="#E8EDF2" fill-opacity="0.16"/>
-    <rect x="622" y="264" width="90" height="34" rx="8" fill="#34D399" fill-opacity="0.15" stroke="#34D399" stroke-opacity="0.5"/>
-    <circle cx="640" cy="281" r="5" fill="#34D399"/>
-    <rect x="654" y="277" width="36" height="8" rx="4" fill="#34D399" fill-opacity="0.7"/>
-    <rect x="724" y="264" width="104" height="34" rx="8" fill="#F87171" fill-opacity="0.12" stroke="#F87171" stroke-opacity="0.5"/>
-    <circle cx="742" cy="281" r="5" fill="#F87171"/>
-    <rect x="756" y="277" width="56" height="8" rx="4" fill="#F87171" fill-opacity="0.7"/>
-    <rect x="622" y="322" width="206" height="8" rx="4" fill="#7DD3FC" fill-opacity="0.35"/>
-    <rect x="622" y="342" width="150" height="8" rx="4" fill="#7DD3FC" fill-opacity="0.2"/>
-    <rect x="622" y="374" width="80" height="10" rx="5" fill="#7DD3FC" fill-opacity="0.6"/>
+    <rect x="600" y="130" width="250" height="280" rx="14" fill="#1A1D22" stroke="#FFFFFF" stroke-opacity="0.1"/>
+    <rect x="622" y="156" width="120" height="12" rx="6" fill="#FFFFFF" fill-opacity="0.85"/>
+    <rect x="622" y="192" width="206" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect x="622" y="212" width="176" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect x="622" y="232" width="192" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect x="622" y="264" width="90" height="34" rx="17" fill="#DDFF00" fill-opacity="0.15" stroke="#DDFF00" stroke-opacity="0.6"/>
+    <circle cx="640" cy="281" r="5" fill="#DDFF00"/>
+    <rect x="654" y="277" width="36" height="8" rx="4" fill="#DDFF00" fill-opacity="0.8"/>
+    <rect x="724" y="264" width="104" height="34" rx="17" fill="#FF5C5C" fill-opacity="0.12" stroke="#FF5C5C" stroke-opacity="0.5"/>
+    <circle cx="742" cy="281" r="5" fill="#FF5C5C"/>
+    <rect x="756" y="277" width="56" height="8" rx="4" fill="#FF5C5C" fill-opacity="0.7"/>
+    <rect x="622" y="322" width="206" height="8" rx="4" fill="#DDFF00" fill-opacity="0.4"/>
+    <rect x="622" y="342" width="150" height="8" rx="4" fill="#DDFF00" fill-opacity="0.22"/>
+    <rect x="622" y="374" width="80" height="10" rx="5" fill="#DDFF00" fill-opacity="0.7"/>
   </g>
 </svg>
