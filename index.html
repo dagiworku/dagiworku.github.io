@@ -158,6 +158,8 @@
       grid-column: 1 / -1; display: grid;
       grid-template-columns: 1fr 1.05fr; gap: 24px; align-items: center;
     }
+    .project-card.featured.flip .project-media { order: 2; }
+    .project-card.featured.flip .project-body { order: 1; }
     .project-body { display: flex; flex-direction: column; gap: 12px; }
     .project-media {
       border-radius: 6px; overflow: hidden; border: 1px solid var(--ink-05);
@@ -184,6 +186,8 @@
     .tech-line { font-family: var(--mono); font-size: 12.5px; color: var(--ink-40); }
     @media (max-width: 720px) {
       .project-card.featured { display: flex; }
+      .project-card.featured.flip .project-media { order: 0; }
+      .project-card.featured.flip .project-body { order: 0; }
     }
 
     /* ---------- Skills ---------- */
@@ -363,7 +367,7 @@
   <h2 class="section-heading">Projects</h2>
   <div class="project-grid">
     <div class="project-card featured reveal">
-      <div class="project-media"><img src="assets/qaqc-cover.svg" alt="Illustration of a BIM model section with clash detection markers and a QA/QC report panel" loading="lazy"></div>
+      <div class="project-media"><img src="assets/qaqc-dashboard.jpg" alt="QA/QC report dashboard: 3,619 elements checked, compliance score, and issue breakdowns by category and severity" loading="lazy"></div>
       <div class="project-body">
       <div class="project-head">
         <h3 class="project-name">BIM Model QA/QC Automation Platform</h3>
@@ -375,6 +379,20 @@
         in the cloud via Autodesk Platform Services Design Automation.
       </p>
       <p class="tech-line">Python · C# · React · Flask · Revit API · Autodesk APS</p>
+      </div>
+    </div>
+    <div class="project-card featured flip reveal">
+      <div class="project-media"><img src="assets/publishops.jpg" alt="PublishOps dashboard: six-step publish pipeline with before/after snapshots, event log, and a verified verdict" loading="lazy"></div>
+      <div class="project-body">
+      <div class="project-head">
+        <h3 class="project-name">PublishOps</h3>
+      </div>
+      <p class="project-desc">
+        One-click orchestration for the Revit to GTP Stratus publish loop: preflight checks,
+        before/after snapshots, pluggable publish actuators, status polling, and a verified
+        verdict, with replayable run records and exportable evidence.
+      </p>
+      <p class="tech-line">Python · FastAPI · SSE · Revit · GTP Stratus</p>
       </div>
     </div>
     <div class="project-card reveal">
@@ -401,18 +419,6 @@
         millions of records, for clearance checks and infringement monitoring.
       </p>
       <p class="tech-line">Python · Vision Transformer · pgvector · PostgreSQL</p>
-    </div>
-    <div class="project-card reveal">
-      <div class="project-media"><img src="assets/publishops.jpg" alt="PublishOps dashboard: six-step publish pipeline with before/after snapshots, event log, and a verified verdict" loading="lazy"></div>
-      <div class="project-head">
-        <h3 class="project-name">PublishOps</h3>
-      </div>
-      <p class="project-desc">
-        One-click orchestration for the Revit to GTP Stratus publish loop: preflight checks,
-        before/after snapshots, pluggable publish actuators, status polling, and a verified
-        verdict, with replayable run records and exportable evidence.
-      </p>
-      <p class="tech-line">Python · FastAPI · SSE · Revit · GTP Stratus</p>
     </div>
     <div class="project-card reveal">
       <div class="project-head">
