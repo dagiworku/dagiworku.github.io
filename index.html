@@ -542,7 +542,7 @@
 </section>
 
 <footer>
-  <p>Designed &amp; built by <span>Dagmawi Worku</span> · Addis Ababa, Ethiopia <span id="local-time"></span></p>
+  <p><span>Dagmawi Worku</span> · Addis Ababa, Ethiopia</p>
 </footer>
 
 <script>
@@ -602,14 +602,6 @@
       setTimeout(() => { copyBtn.textContent = 'Copy email'; }, 1800);
     } catch { copyBtn.textContent = 'dagiworkur166@gmail.com'; }
   });
-
-  // Local time in Addis Ababa
-  const timeEl = document.getElementById('local-time');
-  function tick() {
-    const t = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Addis_Ababa', hour: '2-digit', minute: '2-digit' });
-    timeEl.textContent = '· ' + t + ' EAT';
-  }
-  tick(); setInterval(tick, 30000);
 </script>
 </body>
 </html>
