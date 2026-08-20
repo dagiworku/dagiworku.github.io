@@ -160,6 +160,8 @@
       display: block; transition: transform 0.5s ease;
     }
     .work-card:hover .work-media img { transform: scale(1.04); }
+    .work-card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+    .work-card.wide .work-media { aspect-ratio: auto; height: 100%; min-height: 280px; }
     .work-body { padding: 26px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
     .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .tag {
@@ -285,6 +287,8 @@
       .contact-card { grid-template-columns: 1fr; padding: 36px 28px; gap: 36px; }
       .work-grid { grid-template-columns: 1fr; }
       .hero-badge { left: 14px; }
+      .work-card.wide { display: flex; flex-direction: column; }
+      .work-card.wide .work-media { aspect-ratio: 16 / 9; height: auto; min-height: 0; }
     }
     @media (max-width: 700px) {
       #nav-toggle { display: flex; }
@@ -341,7 +345,7 @@
       <div class="hero-divider"></div>
       <div class="stats-row" id="stats">
         <div>
-          <div class="stat-num" data-count="7" data-suffix="+">0</div>
+          <div class="stat-num" data-count="8" data-suffix="+">0</div>
           <div class="stat-label">Projects done</div>
         </div>
         <div>
@@ -455,6 +459,20 @@
           of records, for clearance checks and infringement monitoring.
         </p>
         <a class="work-link" href="https://clearyourtrademark.com/" target="_blank" rel="noopener">Visit clearyourtrademark.com <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="work-card wide reveal">
+      <div class="work-media"><img src="assets/family-creator.jpg" alt="Revit Family Creator API documentation: multimodal input, seven-layer pipeline, SSE progress, and family creation endpoints" loading="lazy"></div>
+      <div class="work-body">
+        <div class="tag-row"><span class="tag hot">AI × BIM</span><span class="tag">FastAPI</span><span class="tag">Redis</span><span class="tag">Revit API</span></div>
+        <h3>Revit Family Creator</h3>
+        <p>
+          Backend that generates parametric Revit families from natural language, images, and
+          specification documents. A seven-layer agentic pipeline takes each request from
+          multimodal perception through reasoning, 3D generation, conversion, and assembly to
+          automated validation, with a Redis job queue and real-time SSE progress streaming,
+          executing on Autodesk Platform Services.
+        </p>
       </div>
     </div>
   </div>
