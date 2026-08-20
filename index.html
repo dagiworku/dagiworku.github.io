@@ -160,6 +160,9 @@
       display: block; transition: transform 0.5s ease;
     }
     .work-card:hover .work-media img { transform: scale(1.04); }
+    .work-media video {
+      width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
+    }
     .work-card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
     .work-card.wide .work-media { aspect-ratio: auto; height: 100%; min-height: 280px; }
     .work-body { padding: 26px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
@@ -413,7 +416,7 @@
   </div>
   <div class="work-grid">
     <div class="work-card reveal">
-      <div class="work-media"><img src="assets/qaqc-dashboard.jpg" alt="QA/QC report dashboard: elements checked, compliance score, and issue breakdowns" loading="lazy"></div>
+      <div class="work-media"><video autoplay muted loop playsinline poster="assets/qaqc-dashboard.jpg" aria-label="QA/QC report dashboard: elements checked, compliance score, and issue breakdowns"><source src="assets/qaqc-dashboard.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">BIM</span><span class="tag">Python</span><span class="tag">C#</span><span class="tag">React</span></div>
         <h3>BIM Model QA/QC Automation Platform</h3>
@@ -425,7 +428,7 @@
       </div>
     </div>
     <div class="work-card reveal">
-      <div class="work-media"><img src="assets/publishops.jpg" alt="PublishOps dashboard: six-step publish pipeline with snapshots, event log, and verified verdict" loading="lazy"></div>
+      <div class="work-media"><video autoplay muted loop playsinline poster="assets/publishops.jpg" aria-label="PublishOps dashboard: a publish run progressing through the six-step pipeline to a verified verdict"><source src="assets/publishops.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">FastAPI</span><span class="tag">Revit</span><span class="tag">GTP Stratus</span></div>
         <h3>PublishOps</h3>
@@ -462,7 +465,7 @@
       </div>
     </div>
     <div class="work-card wide reveal">
-      <div class="work-media"><img src="assets/family-creator.jpg" alt="Revit Family Creator API documentation: multimodal input, seven-layer pipeline, SSE progress, and family creation endpoints" loading="lazy"></div>
+      <div class="work-media"><video autoplay muted loop playsinline poster="assets/family-creator.jpg" aria-label="Revit Family Creator UI: a family description being typed with the processing pipeline ready"><source src="assets/family-creator.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">AI × BIM</span><span class="tag">FastAPI</span><span class="tag">Redis</span><span class="tag">Revit API</span></div>
         <h3>Revit Family Creator</h3>
@@ -713,6 +716,12 @@
 
   // Stat count-up
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('video[autoplay]').forEach(v => {
+    if (reduceMotion) { v.pause(); v.removeAttribute('autoplay'); return; }
+    v.muted = true;
+    const p = v.play();
+    if (p) p.catch(() => {});
+  });
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
