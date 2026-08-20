@@ -177,6 +177,17 @@
     .work-media.playing .play-badge { opacity: 0; }
     .work-media.playing:hover .play-badge { opacity: 1; background: rgba(0, 0, 0, 0.08); }
     .work-media.playing .play-badge svg { margin-left: 0; }
+    .fs-btn {
+      position: absolute; right: 12px; bottom: 12px; z-index: 2;
+      width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
+      background: rgba(10, 10, 12, 0.78); border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s ease, background 0.2s ease;
+    }
+    .fs-btn svg { width: 18px; height: 18px; fill: #fff; }
+    .work-media:hover .fs-btn { opacity: 1; }
+    .fs-btn:hover { background: var(--accent); }
+    @media (pointer: coarse) { .fs-btn { opacity: 1; } }
     .work-media video {
       width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
     }
@@ -754,6 +765,34 @@
         wrap.classList.remove('playing');
         badge.querySelector('span').innerHTML = playIcon;
       }
+    });
+
+    // Fullscreen button
+    const fs = document.createElement('button');
+    fs.className = 'fs-btn';
+    fs.type = 'button';
+    fs.setAttribute('aria-label', 'Watch fullscreen');
+    fs.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zM5 10h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
+    wrap.appendChild(fs);
+    fs.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (v.paused) {
+        v.muted = true;
+        const p = v.play();
+        if (p) p.catch(() => {});
+        wrap.classList.add('playing');
+        badge.querySelector('span').innerHTML = pauseIcon;
+      }
+      if (v.requestFullscreen) v.requestFullscreen().catch(() => {});
+      else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    });
+  });
+
+  // Native controls (scrubbing, volume) only while fullscreen
+  document.addEventListener('fullscreenchange', () => {
+    document.querySelectorAll('.work-media video').forEach(v => {
+      if (document.fullscreenElement === v) v.setAttribute('controls', '');
+      else v.removeAttribute('controls');
     });
   });
   const statObserver = new IntersectionObserver((entries) => {
