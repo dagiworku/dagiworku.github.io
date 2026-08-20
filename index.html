@@ -160,6 +160,23 @@
       display: block; transition: transform 0.5s ease;
     }
     .work-card:hover .work-media img { transform: scale(1.04); }
+    .work-media { position: relative; }
+    .work-media video { cursor: pointer; }
+    .play-badge {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.18); cursor: pointer; transition: opacity 0.25s ease;
+    }
+    .play-badge span {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: rgba(10, 10, 12, 0.78); border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .play-badge svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
+    .work-media:hover .play-badge span { transform: scale(1.08); background: var(--accent); }
+    .work-media.playing .play-badge { opacity: 0; }
+    .work-media.playing:hover .play-badge { opacity: 1; background: rgba(0, 0, 0, 0.08); }
+    .work-media.playing .play-badge svg { margin-left: 0; }
     .work-media video {
       width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
     }
@@ -416,7 +433,7 @@
   </div>
   <div class="work-grid">
     <div class="work-card reveal">
-      <div class="work-media"><video autoplay muted loop playsinline poster="assets/scenestate.jpg" aria-label="An AI-generated property tour video produced by SceneState"><source src="assets/scenestate.mp4" type="video/mp4"></video></div>
+      <div class="work-media"><video muted loop playsinline preload="metadata" poster="assets/scenestate.jpg" aria-label="An AI-generated property tour video produced by SceneState"><source src="assets/scenestate.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">AI Video</span><span class="tag">Django</span><span class="tag">VEO 3</span></div>
         <h3>SceneState</h3>
@@ -441,7 +458,7 @@
       </div>
     </div>
     <div class="work-card reveal">
-      <div class="work-media"><video autoplay muted loop playsinline poster="assets/qaqc-dashboard.jpg" aria-label="QA/QC report dashboard: elements checked, compliance score, and issue breakdowns"><source src="assets/qaqc-dashboard.mp4" type="video/mp4"></video></div>
+      <div class="work-media"><video muted loop playsinline preload="metadata" poster="assets/qaqc-dashboard.jpg" aria-label="QA/QC report dashboard: elements checked, compliance score, and issue breakdowns"><source src="assets/qaqc-dashboard.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">BIM</span><span class="tag">Python</span><span class="tag">C#</span><span class="tag">React</span></div>
         <h3>BIM Model QA/QC Automation Platform</h3>
@@ -453,7 +470,7 @@
       </div>
     </div>
     <div class="work-card reveal">
-      <div class="work-media"><video autoplay muted loop playsinline poster="assets/publishops.jpg" aria-label="PublishOps dashboard: a publish run progressing through the six-step pipeline to a verified verdict"><source src="assets/publishops.mp4" type="video/mp4"></video></div>
+      <div class="work-media"><video muted loop playsinline preload="metadata" poster="assets/publishops.jpg" aria-label="PublishOps dashboard: a publish run progressing through the six-step pipeline to a verified verdict"><source src="assets/publishops.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">FastAPI</span><span class="tag">Revit</span><span class="tag">GTP Stratus</span></div>
         <h3>PublishOps</h3>
@@ -465,7 +482,7 @@
       </div>
     </div>
     <div class="work-card wide reveal">
-      <div class="work-media"><video autoplay muted loop playsinline poster="assets/family-creator.jpg" aria-label="Revit Family Creator UI: a family description being typed with the processing pipeline ready"><source src="assets/family-creator.mp4" type="video/mp4"></video></div>
+      <div class="work-media"><video muted loop playsinline preload="metadata" poster="assets/family-creator.jpg" aria-label="Revit Family Creator UI: a family description being typed with the processing pipeline ready"><source src="assets/family-creator.mp4" type="video/mp4"></video></div>
       <div class="work-body">
         <div class="tag-row"><span class="tag hot">AI × BIM</span><span class="tag">FastAPI</span><span class="tag">Redis</span><span class="tag">Revit API</span></div>
         <h3>Revit Family Creator</h3>
@@ -716,11 +733,28 @@
 
   // Stat count-up
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('video[autoplay]').forEach(v => {
-    if (reduceMotion) { v.pause(); v.removeAttribute('autoplay'); return; }
-    v.muted = true;
-    const p = v.play();
-    if (p) p.catch(() => {});
+  // Click-to-play videos with a play/pause badge
+  const playIcon = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  const pauseIcon = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  document.querySelectorAll('.work-media video').forEach(v => {
+    const wrap = v.closest('.work-media');
+    const badge = document.createElement('div');
+    badge.className = 'play-badge';
+    badge.innerHTML = '<span>' + playIcon + '</span>';
+    wrap.appendChild(badge);
+    wrap.addEventListener('click', () => {
+      if (v.paused) {
+        v.muted = true;
+        const p = v.play();
+        if (p) p.catch(() => {});
+        wrap.classList.add('playing');
+        badge.querySelector('span').innerHTML = pauseIcon;
+      } else {
+        v.pause();
+        wrap.classList.remove('playing');
+        badge.querySelector('span').innerHTML = playIcon;
+      }
+    });
   });
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
