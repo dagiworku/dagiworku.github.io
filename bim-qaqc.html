@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0A0A0C" />
+  <title>Case Study: BIM QA/QC Automation | Dagmawi Worku</title>
+  <meta name="description" content="How I built an automated QA/QC platform for Revit/BIM models: an 800-rule compliance engine, two-pass clash detection, and one-click fix execution on Autodesk Platform Services." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://dagiworku.github.io/bim-qaqc.html" />
+  <meta property="og:title" content="Case Study: BIM QA/QC Automation Platform" />
+  <meta property="og:description" content="An 800-rule compliance engine, two-pass clash detection, and one-click fix execution, running headlessly on Autodesk Platform Services." />
+  <meta property="og:image" content="https://dagiworku.github.io/assets/qaqc-dashboard.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Case Study: BIM QA/QC Automation Platform" />
+  <meta name="twitter:description" content="An 800-rule compliance engine, two-pass clash detection, and one-click fix execution, running headlessly on Autodesk Platform Services." />
+  <meta name="twitter:image" content="https://dagiworku.github.io/assets/qaqc-dashboard.jpg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0A0C;
+      --bg-soft: #111113;
+      --card: #1C1C1F;
+      --card-2: #232326;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-soft: rgba(255, 255, 255, 0.05);
+      --text: #FFFFFF;
+      --muted: #A1A1AA;
+      --faint: #71717A;
+      --accent: #FF6B2B;
+      --accent-light: #FF8F5C;
+      --head: 'PT Sans', system-ui, sans-serif;
+      --body: 'DM Sans', system-ui, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--bg); color: var(--text); font-family: var(--body);
+      line-height: 1.65; font-weight: 400; -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- Nav ---------- */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10, 10, 12, 0.85);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .nav-inner {
+      max-width: 1104px; margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-logo {
+      font-family: var(--head); font-weight: 700; font-size: 20px;
+      color: var(--text); text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 14.5px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 4px 0; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-size: 14px; font-weight: 600; color: #fff; background: var(--accent);
+      border-radius: 999px; padding: 9px 20px; text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .nav-cta .arrow { display: inline-block; transition: transform 0.2s; }
+    .nav-cta:hover .arrow { transform: translateX(3px); }
+
+    /* ---------- Type ---------- */
+    .kicker {
+      font-size: 12.5px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+    }
+    h1 {
+      font-family: var(--head); font-weight: 700; letter-spacing: -0.02em;
+      font-size: clamp(32px, 5vw, 50px); line-height: 1.1; margin-bottom: 20px;
+    }
+    h2 {
+      font-family: var(--head); font-weight: 700; letter-spacing: -0.01em;
+      font-size: clamp(24px, 3.2vw, 30px); line-height: 1.2; margin: 0 0 18px;
+    }
+    h3 { font-family: var(--head); font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+    .lede { font-size: 17.5px; color: var(--muted); max-width: 700px; }
+    .lede strong { color: var(--text); font-weight: 500; }
+    .prose p { font-size: 16px; color: var(--muted); margin-bottom: 18px; max-width: 720px; }
+    .prose p strong { color: var(--text); font-weight: 500; }
+    .prose ul { list-style: none; margin: 0 0 18px; max-width: 720px; }
+    .prose li { font-size: 15.5px; color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    .prose li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 13px; top: 2px; }
+    .prose li strong { color: var(--text); font-weight: 500; }
+
+    /* ---------- Case header ---------- */
+    .case-hero { padding: 72px 0 48px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 26px;
+      font-size: 14.5px; font-weight: 600; color: var(--muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+    .meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 18px 28px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line-soft);
+    }
+    .meta-label {
+      font-size: 11.5px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--faint); margin-bottom: 4px;
+    }
+    .meta-value { font-size: 14.5px; color: var(--text); font-weight: 500; }
+
+    /* ---------- Media ---------- */
+    .case-media {
+      border-radius: 18px; border: 1px solid var(--line); overflow: hidden;
+      background: var(--bg-soft); position: relative; margin: 8px 0 0;
+    }
+    .case-media video { width: 100%; display: block; cursor: pointer; }
+    .play-badge {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.18); cursor: pointer; transition: opacity 0.25s ease;
+    }
+    .play-badge span {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: rgba(10, 10, 12, 0.78); border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .play-badge svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
+    .case-media:hover .play-badge span { transform: scale(1.08); background: var(--accent); }
+    .case-media.playing .play-badge { opacity: 0; }
+    .case-media.playing:hover .play-badge { opacity: 1; background: rgba(0, 0, 0, 0.08); }
+    .case-media.playing .play-badge svg { margin-left: 0; }
+    .media-caption { font-size: 13px; color: var(--faint); margin-top: 12px; }
+
+    /* ---------- Sections ---------- */
+    section { padding: 44px 0; }
+    .band { background: var(--bg-soft); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+
+    /* ---------- Pipeline flow ---------- */
+    .flow { display: grid; gap: 14px; margin: 26px 0 6px; }
+    .flow-step {
+      display: grid; grid-template-columns: 44px 1fr; gap: 18px; align-items: start;
+      background: var(--card); border: 1px solid var(--line-soft); border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .flow-num {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: var(--card-2); border: 1px solid var(--line-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--head); font-weight: 700; font-size: 17px; color: var(--accent);
+    }
+    .flow-step h3 { margin-bottom: 4px; font-size: 16.5px; }
+    .flow-step p { font-size: 14.5px; color: var(--muted); }
+
+    /* ---------- Numbers strip ---------- */
+    .num-strip {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px; margin: 26px 0 10px;
+    }
+    .num-card {
+      background: var(--card); border: 1px solid var(--line-soft); border-radius: 14px;
+      padding: 22px;
+    }
+    .num-card .n {
+      font-family: var(--head); font-weight: 700; font-size: 30px; letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    .num-card .l { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+    /* ---------- Deep dives ---------- */
+    .dive { padding: 30px 0 8px; border-top: 1px solid var(--line-soft); margin-top: 22px; }
+    .dive:first-of-type { border-top: none; margin-top: 0; padding-top: 4px; }
+    .dive-kicker {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
+    }
+    .dive h3 { font-size: 21px; margin-bottom: 12px; }
+
+    /* ---------- CTA ---------- */
+    .cta-card {
+      background: var(--card); border: 1px solid var(--line-soft); border-radius: 24px;
+      padding: 44px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-card::before {
+      content: ''; position: absolute; right: -140px; top: -140px;
+      width: 420px; height: 420px; pointer-events: none;
+      background: radial-gradient(circle at center, rgba(255, 107, 43, 0.14), transparent 70%);
+    }
+    .cta-card > * { position: relative; }
+    .cta-card p { font-size: 15.5px; color: var(--muted); max-width: 480px; margin: 0 auto 26px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 26px; border-radius: 999px; font-size: 15px; font-weight: 600;
+      text-decoration: none; cursor: pointer; font-family: var(--body);
+      transition: transform 0.15s, background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-accent { background: var(--accent); color: #fff; border: 0; }
+    .btn-accent:hover { background: var(--accent-light); }
+    .btn-outline { background: none; border: 1px solid var(--line); color: var(--text); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    footer {
+      border-top: 1px solid var(--line-soft); padding: 28px 0; text-align: center;
+      font-size: 13.5px; color: var(--faint);
+    }
+    footer span { color: var(--accent); }
+
+    /* ---------- Reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    @media (max-width: 700px) {
+      .case-hero { padding: 48px 0 36px; }
+      section { padding: 36px 0; }
+      .nav-links { display: none; }
+      .cta-card { padding: 36px 24px; }
+      .flow-step { grid-template-columns: 36px 1fr; gap: 14px; padding: 18px; }
+      .flow-num { width: 36px; height: 36px; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">dag<span>mawi</span></a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="mailto:dagiworkur166@gmail.com">Hire me <span class="arrow">→</span></a>
+  </div>
+</nav>
+
+<header class="case-hero container">
+  <a class="back-link" href="index.html#work">← All work</a>
+  <p class="kicker">Case study</p>
+  <h1>BIM Model QA/QC Automation Platform</h1>
+  <p class="lede">
+    How I turned a manual model-review process into an automated pipeline:
+    an <strong>800+ rule compliance engine</strong>, two-pass clash detection with
+    resolution suggestions, and <strong>one-click fix execution</strong> that writes
+    corrections back into the Revit model, all running headlessly in the cloud.
+  </p>
+  <div class="meta-grid">
+    <div>
+      <div class="meta-label">Role</div>
+      <div class="meta-value">Lead developer</div>
+    </div>
+    <div>
+      <div class="meta-label">Client</div>
+      <div class="meta-value">Internal client platform</div>
+    </div>
+    <div>
+      <div class="meta-label">Stack</div>
+      <div class="meta-value">C# · Python · React</div>
+    </div>
+    <div>
+      <div class="meta-label">Runs on</div>
+      <div class="meta-value">Autodesk Platform Services</div>
+    </div>
+  </div>
+</header>
+
+<section class="container" style="padding-top: 0;">
+  <div class="case-media reveal">
+    <video muted loop playsinline preload="metadata" poster="assets/qaqc-dashboard.jpg" aria-label="QA/QC report dashboard: elements checked, compliance score, and issue breakdowns"><source src="assets/qaqc-dashboard.mp4" type="video/mp4"></video>
+  </div>
+  <p class="media-caption">The interactive report a reviewer gets back: compliance score, issue breakdowns by category and severity, and a clash section with suggested fixes.</p>
+</section>
+
+<section class="container prose">
+  <p class="kicker">The problem</p>
+  <h2>Model review was a human bottleneck</h2>
+  <p>
+    Before a Revit/BIM model goes to fabrication or construction, someone has to check it:
+    are elements configured to the project standards, are systems routed without collisions,
+    is the data on each element complete and consistent? Done by hand, that means an engineer
+    clicking through a model with <strong>tens of thousands of elements</strong> against
+    hundreds of written requirements. It is slow, it does not scale across projects, and the
+    clashes that slip through are found on site, where they are most expensive to fix.
+  </p>
+  <p>
+    The goal was to make that review automatic: upload a model, get back a scored report of
+    every violation and clash, and where possible, let the platform fix the model itself.
+  </p>
+</section>
+
+<div class="band">
+  <section class="container prose">
+    <p class="kicker">The system</p>
+    <h2>From model to fixed model in five stages</h2>
+    <p>
+      The platform is split between a <strong>C# rule and clash engine</strong> that runs inside
+      headless Revit on Autodesk Platform Services (Design Automation), and a
+      <strong>Python service</strong> that manages jobs, normalizes results, and serves the
+      dashboard and interactive reports.
+    </p>
+    <div class="flow">
+      <div class="flow-step reveal">
+        <div class="flow-num">1</div>
+        <div>
+          <h3>Pick a model, pick a rule pack</h3>
+          <p>From the dashboard, a reviewer selects a cloud-hosted Revit model and the rule set for that project. The Python service filters rules by sensitivity tier and submits a Design Automation job.</p>
+        </div>
+      </div>
+      <div class="flow-step reveal">
+        <div class="flow-num">2</div>
+        <div>
+          <h3>Headless extraction and rule evaluation</h3>
+          <p>In the cloud sandbox, the C# addin opens the model without a UI, extracts every relevant element with its parameters and geometry, and evaluates 800+ expression-based compliance rules against them.</p>
+        </div>
+      </div>
+      <div class="flow-step reveal">
+        <div class="flow-num">3</div>
+        <div>
+          <h3>Two-pass clash detection</h3>
+          <p>A fast bounding-box pass finds candidate collisions across all system pairs, then a precise geometry pass verifies real intersections. An analyzer matches each clash against resolution rules and proposes ranked fixes.</p>
+        </div>
+      </div>
+      <div class="flow-step reveal">
+        <div class="flow-num">4</div>
+        <div>
+          <h3>Interactive report</h3>
+          <p>Results come back as structured JSON plus a pre-rendered clash section. The service builds a self-contained report: compliance score, issues by category and severity, and per-clash resolution plans with code references.</p>
+        </div>
+      </div>
+      <div class="flow-step reveal">
+        <div class="flow-num">5</div>
+        <div>
+          <h3>One-click fix execution</h3>
+          <p>The reviewer approves suggested fixes in the report. A second cloud job reopens the model, applies the approved corrections through registered fix handlers, and saves a corrected version, while the report polls live status.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="container prose">
+  <p class="kicker">Engineering deep dives</p>
+  <h2>Three problems worth telling</h2>
+
+  <div class="dive">
+    <p class="dive-kicker">Deep dive 01</p>
+    <h3>Killing false positives without killing coverage</h3>
+    <p>
+      An automated checker that cries wolf gets ignored, and early on this one did. The worst
+      case: a material-transition rule referenced parameters that fabrication elements do not
+      carry, and a rule that fails to evaluate was being counted as a violation. One run flagged
+      <strong>all 25,843 pipe fittings and accessories</strong> in a model at once.
+    </p>
+    <p>Two changes fixed the trust problem:</p>
+    <ul>
+      <li><strong>Safe evaluation.</strong> Parameter access went through null-safe helpers, so a rule that references data a model does not have resolves cleanly instead of failing into a false violation.</li>
+      <li><strong>Sensitivity tiers.</strong> Every rule was classified into three tiers: geometry and clash checks always run, configuration checks run by default, and metadata or empty-field checks are opt-in because they are the noisiest. A classification script keeps the tiers in sync as the rule library grows, and the reviewer chooses the tier per run.</li>
+    </ul>
+    <p>
+      The result is a report where a flagged issue is worth reading, which is the difference
+      between a tool people use and a tool people bypass.
+    </p>
+  </div>
+
+  <div class="dive">
+    <p class="dive-kicker">Deep dive 02</p>
+    <h3>Clash detection that fits a cloud time budget</h3>
+    <p>
+      Checking every element pair for geometric intersection is far too slow for models of this
+      size, and cloud jobs have hard time limits. The engine runs in two passes: a cheap
+      bounding-box sweep first cuts the candidate set down by orders of magnitude, then exact
+      solid-geometry intersection runs only on those candidates. Analytics on top group the
+      results into system pairs and rank the worst offenders, so a reviewer sees the twenty
+      clashes that matter instead of a wall of raw hits.
+    </p>
+    <p>
+      Each verified clash then goes through a resolution analyzer driven by a versioned JSON
+      rulebook: eight strategies, from vertical and horizontal offsets to elevation swaps and
+      coordination RFIs, each scored per system pair and annotated with the code references that
+      justify it.
+    </p>
+  </div>
+
+  <div class="dive">
+    <p class="dive-kicker">Deep dive 03</p>
+    <h3>Closing the loop: fixes that write themselves back</h3>
+    <p>
+      Reporting a clash is useful; fixing it is the product. Approved resolution plans are
+      compiled into fix definitions and sent to a second headless Revit job, where a registry of
+      fix handlers applies the matching strategy, moving a duct up, offsetting a pipe run,
+      swapping elevations, inside a real Revit transaction, then saves the corrected model.
+    </p>
+    <p>
+      Making that reliable meant designing for the sandbox's constraints: signed upload and
+      download URLs expire in 60 minutes, jobs can sit in a queue behind other tenants, and a
+      partial fix run must never corrupt the model or the report. The report's embedded
+      JavaScript polls job status with backoff and renders per-fix success or failure when the
+      run completes, so the reviewer watches the loop close from the same page.
+    </p>
+  </div>
+</section>
+
+<div class="band">
+  <section class="container prose">
+    <p class="kicker">Outcome</p>
+    <h2>The review that took days now runs unattended</h2>
+    <div class="num-strip">
+      <div class="num-card reveal"><div class="n">800+</div><div class="l">compliance rules in the engine</div></div>
+      <div class="num-card reveal"><div class="n">25k+</div><div class="l">elements checked in a single run</div></div>
+      <div class="num-card reveal"><div class="n">8</div><div class="l">automated clash-resolution strategies</div></div>
+      <div class="num-card reveal"><div class="n">3</div><div class="l">sensitivity tiers to control noise</div></div>
+    </div>
+    <p style="margin-top: 16px;">
+      The platform is in active use on production fabrication models. A full compliance and
+      clash run happens in the cloud with no engineer babysitting Revit, the report is a single
+      file anyone can open, and the simplest class of clashes never reaches a human at all.
+      It is the project that taught me the most about making automation trustworthy, not just
+      functional.
+    </p>
+  </section>
+</div>
+
+<section class="container">
+  <div class="cta-card reveal">
+    <p class="kicker">Next</p>
+    <h2>Want the longer version?</h2>
+    <p>
+      I am happy to walk through the architecture, the rule engine, or the fix pipeline in
+      detail, or talk about what a system like this could do for your models.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-accent" href="index.html#contact">Get in touch <span class="arrow">→</span></a>
+      <a class="btn btn-outline" href="index.html#work">See more work</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><span>Dagmawi Worku</span> · Addis Ababa, Ethiopia</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Click-to-play video with a play/pause badge
+  const playIcon = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  const pauseIcon = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  document.querySelectorAll('.case-media video').forEach(v => {
+    const wrap = v.closest('.case-media');
+    const badge = document.createElement('div');
+    badge.className = 'play-badge';
+    badge.innerHTML = '<span>' + playIcon + '</span>';
+    wrap.appendChild(badge);
+    wrap.addEventListener('click', () => {
+      if (v.paused) {
+        v.muted = true;
+        const p = v.play();
+        if (p) p.catch(() => {});
+        wrap.classList.add('playing');
+        badge.querySelector('span').innerHTML = pauseIcon;
+      } else {
+        v.pause();
+        wrap.classList.remove('playing');
+        badge.querySelector('span').innerHTML = playIcon;
+      }
+    });
+  });
+</script>
+</body>
+</html>
